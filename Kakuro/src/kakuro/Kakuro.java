@@ -5,6 +5,8 @@
  */
 package kakuro;
 
+import kakuro.forms.Principal;
+
 /**
  *
  * @author Anthony
@@ -16,6 +18,8 @@ public class Kakuro {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Principal ventana = new Principal();
+        ventana.setVisible(true);
     }
     
 }

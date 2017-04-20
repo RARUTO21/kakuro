@@ -60,6 +60,11 @@ public class Principal extends javax.swing.JFrame {
         jLabel1.setText("Crear Kakuro");
 
         btnCrearKakuro.setText("Crear");
+        btnCrearKakuro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearKakuroActionPerformed(evt);
+            }
+        });
 
         cboCrear.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Normal", "Con Hilos", "Con Procesos" }));
         cboCrear.addActionListener(new java.awt.event.ActionListener() {
@@ -176,11 +181,17 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnResolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResolverActionPerformed
         // TODO add your handling code here:
+        prueba("3");
     }//GEN-LAST:event_btnResolverActionPerformed
 
     private void cboCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboCrearActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cboCrearActionPerformed
+
+    private void btnCrearKakuroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearKakuroActionPerformed
+        // TODO add your handling code here:
+        prueba("4");
+    }//GEN-LAST:event_btnCrearKakuroActionPerformed
     
     final void generarBotones(){
         
@@ -188,6 +199,16 @@ public class Principal extends javax.swing.JFrame {
         
         panelMatriz.setPreferredSize(new Dimension(620,679));
         
+        for (JButton[] physicalMatrix1 : physicalMatrix) {
+            for (int j = 0; j < physicalMatrix1.length; j++) {
+                physicalMatrix1[j] = new JButton(); //String.valueOf(i)+"↓"+String.valueOf(j)+"→");
+                physicalMatrix1[j].setVisible(true);
+                physicalMatrix1[j].setEnabled(false);
+                physicalMatrix1[j].setPreferredSize(new Dimension(50,50));
+                panelMatriz.add(physicalMatrix1[j]);
+            }
+        }
+        /* MI VERSION DE CODIGO QUE FUNCIONA
         for(int i = 0; i<physicalMatrix.length;i++){
             for(int j = 0; j<physicalMatrix[i].length;j++){
                 
@@ -200,12 +221,22 @@ public class Principal extends javax.swing.JFrame {
                 
             }
         }
+        */
         getContentPane().add(panelMatriz);
         pack();
         setVisible(true);
         
     }
     
+    
+    void prueba(String valor){
+        for (JButton[] physicalMatrix1 : physicalMatrix) {
+            for (JButton physicalMatrix11 : physicalMatrix1) {
+                physicalMatrix11.setText(valor);
+            }
+        }
+    
+    }
     
     /**
      * @param args the command line arguments
