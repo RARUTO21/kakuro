@@ -4,14 +4,13 @@
  * and open the template in the editor.
  */
 package kakuro.forms;
-import java.awt.Dimension;/*
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;*/
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.JButton;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -20,6 +19,7 @@ import javax.swing.JButton;
 public class Principal extends javax.swing.JFrame {
     
     final int[][] logicalMatrix;
+    final boolean[][] index;
     JButton[][] physicalMatrix;
     
     /**
@@ -29,8 +29,11 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         logicalMatrix = new int[14][14];
         physicalMatrix = new JButton[14][14];
+        index = new boolean[14][14];
         
         generarBotones();
+        
+        
     }
 
     /**
@@ -181,7 +184,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnResolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResolverActionPerformed
         // TODO add your handling code here:
-        prueba("3");
+        prueba("\t30↓\n45→");
     }//GEN-LAST:event_btnResolverActionPerformed
 
     private void cboCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboCrearActionPerformed
@@ -190,8 +193,15 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnCrearKakuroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearKakuroActionPerformed
         // TODO add your handling code here:
-        prueba("4");
+        //prueba("4");
     }//GEN-LAST:event_btnCrearKakuroActionPerformed
+    
+    void definirIndices(){
+        for(int i = 1; i<logicalMatrix.length;i++)
+            for (int j = 1; j<logicalMatrix[i].length;j++){
+                
+            }
+    }
     
     final void generarBotones(){
         
@@ -201,10 +211,20 @@ public class Principal extends javax.swing.JFrame {
         
         for (JButton[] physicalMatrix1 : physicalMatrix) {
             for (int j = 0; j < physicalMatrix1.length; j++) {
-                physicalMatrix1[j] = new JButton(); //String.valueOf(i)+"↓"+String.valueOf(j)+"→");
-                physicalMatrix1[j].setVisible(true);
-                physicalMatrix1[j].setEnabled(false);
-                physicalMatrix1[j].setPreferredSize(new Dimension(50,50));
+                JButton miBoton = new JButton();
+                miBoton.setBackground(Color.BLACK);
+                miBoton.setPreferredSize(new Dimension(50,50));
+                miBoton.setVisible(true);
+                physicalMatrix1[j] = miBoton;
+                //String.valueOf(i)+"↓"+String.valueOf(j)+"→");
+                
+                //physicalMatrix1[j].setFont(new Font("TimesRoman", Font.BOLD, 8));
+                //physicalMatrix1[j].setBackground(java.awt.Color.RED);
+                //physicalMatrix1[j].setOpaque(true);
+                //physicalMatrix1[j].setBorderPainted(false);
+                //physicalMatrix1[j].setEnabled(false);             
+                //physicalMatrix1[j].setPreferredSize(new Dimension(50,50));
+                //physicalMatrix1[j].setVisible(true);
                 panelMatriz.add(physicalMatrix1[j]);
             }
         }
