@@ -6,6 +6,7 @@
 package kakurofx;
 
 
+import static java.lang.Math.abs;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -13,6 +14,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Date;
 
 /**
  *
@@ -20,9 +23,10 @@ import java.util.ArrayList;
  */
 public class FXMLDocumentController implements Initializable {
     
-    private ArrayList<Integer> llaves = new ArrayList();
+    private ArrayList<ArrayList<Integer>> llaves = new ArrayList();
     private int[][] logicalMatrix = new int[14][14];
     public Button[][] physicalMatrix = new Button[14][14];
+    public Random rnd = new Random();
     
     @FXML   //Declaracion de los botones
     public Button btn0000,btn0001,btn0002,btn0003,btn0004,btn0005,btn0006,btn0007,btn0008,btn0009,btn0010,btn0011,btn0012,btn0013;
@@ -80,16 +84,152 @@ public class FXMLDocumentController implements Initializable {
         //button2.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.Empty, Insets.Empty)));
     }
     
+    public void cargarMatriz(){
+        for(int i=0; i<14; i++){
+            for(int j=0; j<14; j++)
+                logicalMatrix[i][j] = 0;
+        }
+    }
+    
+    public void mostrarMatriz(){
+        for(int i=0; i<14; i++){
+            for(int j=0; j<14; j++)
+                System.out.print(logicalMatrix[i][j]+"     ");
+            System.out.println("\n");
+        }
+        System.out.println("------------------------------------");
+    }
+    
+    public void cargarHabilitados(){
+        ArrayList<ArrayList<Integer>> listos = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> listosForma = new ArrayList<>();        
+        int lado,tipoForma,cuadros = 0,fila,columna,cont = 0;
+        Date ahora = new Date();
+        rnd.setSeed(ahora.getTime());
+        while(cuadros<8){
+            ArrayList<Integer> coordenada = new ArrayList<>();            
+            fila = 1+rnd.nextInt(11);
+            columna = 1+rnd.nextInt(11);
+            System.out.println("Cuadro "+cuadros+". Coordenada Fila: "+fila+". Coodernada Columna: "+columna);
+            if(cumple(fila,columna,listos) || listos.size()==0){
+                habilitarCuadro(fila, columna);
+                coordenada.add(fila);
+                coordenada.add(columna);
+                listos.add(coordenada);
+                cuadros++;
+            }
+        }
+        mostrarMatriz();
+        for(int i=0; i<listos.size(); i++){
+            /*Lado = abajo-derecha(0), izquierda-abajo(1), abajo-izquierda(2), derecha-abajo(3)*/                    
+            if(listos.get(i).get(0)<=6 && listos.get(i).get(1)<=6){                
+                //lado = rnd.nextInt(4);
+                tipoForma = rnd.nextInt(4);
+                System.out.println("Superior Izquierda. Tipo de forma: "+tipoForma+"["+listos.get(i).get(0)+","+listos.get(i).get(1)+"]");
+                //if(lado == 0 && listos.get(i).get(0)+3<=13 && listos.get(i).get(1)+3<=13){
+                    if(tipoForma == 0){
+                        System.out.println("Entra: "+listos.get(i).get(0)+2+" "+listos.get(i).get(1)+1);
+                        habilitarForma(listos.get(i).get(0)+2,listos.get(i).get(1)+1,0,1,1,0);
+                    }else if(tipoForma == 1){
+                        System.out.println("Entra: "+listos.get(i).get(0)+2+" "+listos.get(i).get(1)+2);
+                        habilitarForma(listos.get(i).get(0)+2,listos.get(i).get(1)+2,0,0,1,1);
+                    }else if(tipoForma == 2){
+                        System.out.println("Entra: "+listos.get(i).get(0)+4+" "+listos.get(i).get(1)+1);
+                        habilitarForma(listos.get(i).get(0)+3,listos.get(i).get(1)+1,1,1,0,0);
+                    }else if(tipoForma == 3){
+                        System.out.println("Entra: "+listos.get(i).get(0)+2+" "+listos.get(i).get(1)+2);
+                        habilitarForma(listos.get(i).get(0)+2,listos.get(i).get(1)+2,1,0,0,1);
+                    }
+                //}
+            }else if(listos.get(i).get(0)<=6 && listos.get(i).get(1)>6){
+                //lado = rnd.nextInt(4);
+                tipoForma = rnd.nextInt(4);
+                System.out.println("Superior Derecha. Tipo de forma: "+tipoForma+"["+listos.get(i).get(0)+","+listos.get(i).get(1)+"]");
+                //if(lado == 0 && listos.get(i).get(0)+3<=13 && listos.get(i).get(1)+3<=13){
+                    if(tipoForma == 0){
+                        habilitarForma(listos.get(i).get(0)+1,listos.get(i).get(1)-2,0,1,1,0);
+                    }else if(tipoForma == 1){
+                        habilitarForma(listos.get(i).get(0)+1,listos.get(i).get(1)-1,0,0,1,1);
+                    }else if(tipoForma == 2){
+                        habilitarForma(listos.get(i).get(0)+2,listos.get(i).get(1)-1,1,1,0,0);
+                    }else if(tipoForma == 3){
+                        habilitarForma(listos.get(i).get(0)+2,listos.get(i).get(1)-1,1,0,0,1);
+                    }
+                //}
+            }else if(listos.get(i).get(0)>6 && listos.get(i).get(1)<=6){
+                //lado = rnd.nextInt(4);
+                tipoForma = rnd.nextInt(4);
+                System.out.println("Inferior Izquierda. Tipo de forma: "+tipoForma+"["+listos.get(i).get(0)+","+listos.get(i).get(1)+"]");
+                //if(lado == 0 && listos.get(i).get(0)+3<=13 && listos.get(i).get(1)+3<=13){
+                    if(tipoForma == 0){
+                        habilitarForma(listos.get(i).get(0)-1,listos.get(i).get(1)+2,0,1,1,0);
+                    }else if(tipoForma == 1){
+                        habilitarForma(listos.get(i).get(0)-1,listos.get(i).get(1)+2,0,0,1,1);
+                    }else if(tipoForma == 2){
+                        habilitarForma(listos.get(i).get(0),listos.get(i).get(1)+2,1,1,0,0);
+                    }else if(tipoForma == 3){
+                        habilitarForma(listos.get(i).get(0),listos.get(i).get(1)+3,1,0,0,1);
+                    }
+                //}
+            }else if(listos.get(i).get(0)>6 && listos.get(i).get(1)>6){
+                //lado = rnd.nextInt(4);
+                tipoForma = rnd.nextInt(4);
+                System.out.println("Inferior Derecha. Tipo de forma: "+tipoForma+"["+listos.get(i).get(0)+","+listos.get(i).get(1)+"]");
+                //if(lado == 0 && listos.get(i).get(0)+3<=13 && listos.get(i).get(1)+3<=13){
+                    if(tipoForma == 0){
+                        habilitarForma(listos.get(i).get(0)-2,listos.get(i).get(1),0,1,1,0);
+                    }else if(tipoForma == 1){
+                        habilitarForma(listos.get(i).get(0)-2,listos.get(i).get(1),0,0,1,1);
+                    }else if(tipoForma == 2){
+                        habilitarForma(listos.get(i).get(0)-1,listos.get(i).get(1)-1,1,1,0,0);
+                    }else if(tipoForma == 3){
+                        habilitarForma(listos.get(i).get(0)-1,listos.get(i).get(1),1,0,0,1);
+                    }
+                //}
+            }            
+        }
+    }
+    
+    public void habilitarForma(int fila, int columna, int arriba, int der, int abajo, int izq){
+        System.out.println("kakurofx.FXMLDocumentController.habilitarForma()");
+        System.out.println(fila+"-->"+columna);
+        logicalMatrix[fila][columna] = 1;
+        if(der == 1){
+            logicalMatrix[fila][columna+1] = 1;
+        }if(izq == 1){
+            logicalMatrix[fila][columna-1] = 1;
+        }if(abajo == 1){
+            logicalMatrix[fila+1][columna] = 1;
+        }if(arriba == 1){
+            logicalMatrix[fila- 1][columna] = 1;
+        }System.out.println("kakurofx.FXMLDocumentController.habilitarForma()FIn");
+    }
+    
+    public boolean cumple(int fila, int columna, ArrayList<ArrayList<Integer>> listos){        
+        //System.out.println("FILA:"+fila+" COLUMNA: "+columna+" LISTOS: "+listos);
+        for(int i=0; i<listos.size(); i++){
+            if(abs((listos.get(i).get(0)-fila))<4 && abs((listos.get(i).get(1)-columna))<4)
+                return false;
+        }
+        return true;
+    }    
+    
+    public void habilitarCuadro(int fila, int columna){
+        System.out.println("Habilitar");
+        logicalMatrix[fila][columna] = 1;
+        logicalMatrix[fila][columna+1] = 1;
+        logicalMatrix[fila+1][columna] = 1;
+        logicalMatrix[fila+1][columna+1] = 1;
+    }        
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        
+        // TODO          
         this.enlazarBotones();
         this.escribir();
-        
-        
-    }    
+        this.cargarHabilitados();
+        this.mostrarMatriz();
+    }
     
 }
 
