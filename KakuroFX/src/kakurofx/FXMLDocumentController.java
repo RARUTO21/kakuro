@@ -181,8 +181,8 @@ public class FXMLDocumentController implements Initializable {
         
         this.enlazarBotones();
         //this.escribir();
-        this.cargarMatrizLogica();
-        this.cargarLlaves();
+        //this.cargarMatrizLogica();
+        //this.cargarLlaves();
         this.mostrarLlaves();
         
     } 

@@ -219,7 +219,7 @@
       <Button layoutX="212.0" layoutY="70.0" mnemonicParsing="false" text="Crear" />
       <Button disable="true" layoutX="203.0" layoutY="518.0" mnemonicParsing="false" text="Resolver" />
       <Button layoutX="209.0" layoutY="133.0" mnemonicParsing="false" text="Cargar" />
-      <Button layoutX="211.0" layoutY="303.0" mnemonicParsing="false" text="Guardar" />
+      <Button disable="true" layoutX="211.0" layoutY="303.0" mnemonicParsing="false" text="Guardar" />
       <Label layoutX="41.0" layoutY="129.0" prefHeight="35.0" prefWidth="139.0" text="Desde archivo">
          <font>
             <Font name="Helvetica" size="18.0" />
