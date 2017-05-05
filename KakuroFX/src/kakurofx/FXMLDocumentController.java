@@ -9,20 +9,19 @@ package kakurofx;
 import static java.lang.Math.abs;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Date;
+import javafx.scene.control.ComboBox;
 
 /**
  *
  * @author Anthony
  */
 public class FXMLDocumentController implements Initializable {
-    
     private ArrayList<ArrayList<Integer>> llaves = new ArrayList();
     private int[][] logicalMatrix = new int[15][15];
     public Button[][] physicalMatrix = new Button[14][14];
@@ -44,11 +43,11 @@ public class FXMLDocumentController implements Initializable {
     public Button btn1200,btn1201,btn1202,btn1203,btn1204,btn1205,btn1206,btn1207,btn1208,btn1209,btn1210,btn1211,btn1212,btn1213;
     public Button btn1300,btn1301,btn1302,btn1303,btn1304,btn1305,btn1306,btn1307,btn1308,btn1309,btn1310,btn1311,btn1312,btn1313;
     public Button[][] matrizFisica;
+    public Button crear_kakuro, cargar_kakuro, guardar_kakuro, resolver_kakuro;
+    public ComboBox combo_crear, combo_resolver;
     
     
-    public Button[][] getPhysicalMatrix() {
-        return physicalMatrix;
-    }
+    public int[][] prueba = new int[100][4];
     
     public void enlazarBotones(){
         this.physicalMatrix[0][0] = this.btn0000; this.physicalMatrix[0][1] = this.btn0001; this.physicalMatrix[0][2] = this.btn0002; this.physicalMatrix[0][3] = this.btn0003; this.physicalMatrix[0][4] = this.btn0004; this.physicalMatrix[0][5] = this.btn0005; this.physicalMatrix[0][6] = this.btn0006; this.physicalMatrix[0][7] = this.btn0007; this.physicalMatrix[0][8] = this.btn0008; this.physicalMatrix[0][9] = this.btn0009; this.physicalMatrix[0][10] = this.btn0010; this.physicalMatrix[0][11] = this.btn0011; this.physicalMatrix[0][12] = this.btn0012; this.physicalMatrix[0][13] = this.btn0013;
@@ -77,18 +76,87 @@ public class FXMLDocumentController implements Initializable {
         
     }
     
-    @FXML
-    private void cambiarColor(ActionEvent event){
-        //btn0000.setStyle("-fx-opacity: 1; -fx-base: #00FFFF;");
-        System.out.println("Negro puto!!");
-        //button2.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.Empty, Insets.Empty)));
+    
+    public void mostrarLlaves(){// → ↓
+        int x,y;
+        String valorH,valorV,texto_final;
+        
+        for(ArrayList<Integer> llave: llaves){
+            x = llave.get(0);
+            y = llave.get(1);
+            if(llave.get(2)!= 0){
+                if(llave.get(2)== -1)
+                    valorH = "?→";
+                else{
+                    valorH = String.valueOf(llave.get(2))+"→";
+                }
+            }else{
+                valorH = "";
+            }
+            if(llave.get(3)!= 0){
+                if(llave.get(3)== -1)
+                    valorV = "?↓";
+                else{
+                    valorV = String.valueOf(llave.get(3))+"↓";
+                }
+            }else{
+                valorV = "";
+            }
+            //valorH = (llave.get(3)!= 0) ? String.valueOf(llave.get(3))+"→" : "";
+            //valorV = (llave.get(2)!= 0) ? String.valueOf(llave.get(2))+"↓" : "";
+            texto_final = valorH + "\n"+valorV;
+            if(llave.get(3) == 0 || llave.get(2) == 0)
+                texto_final = texto_final.replace("\n","");
+            physicalMatrix[x][y].setText(texto_final);
+            physicalMatrix[x][y].setStyle("-fx-opacity:1; -fx-base: #000000; -fx-text-fill: white");
+        }
     }
     
-    public void cargarMatriz(){
-        for(int i=0; i<14; i++){
-            for(int j=0; j<14; j++)
-                logicalMatrix[i][j] = 0;
-        }
+    public void cargar_Llaves(){
+        this.empaquetarValores(new Integer[][]{  {0,1,15,0},{0,2,8,0},{0,3,29,0},{0,5,21,0},{0,11,-1,0},{0,12,14,0},
+                                            {0,12,14,0},{1,0,0,13},{1,4,15,-1},{1,6,11,0},{1,7,-1,0},{1,10,-1,7},
+                                            {2,0,0,32},{2,9,14,-1},{2,11,0,-1},{2,13,17,0},{3,1,9,0},{3,2,5,27},
+                                            {3,7,31,0},{3,8,19,-1},{3,10,13,0},{3,12,0,-1},{4,0,0,7},{4,4,14,0},
+                                            {4,6,0,24},{4,12,0,-1},{5,0,0,17},{5,5,-1,0},{5,6,0,13},{5,9,0,-1},
+                                            {5,12,0,-1},{6,1,14,0},{6,2,0,23},{6,6,0,13},{6,11,-1,0},{6,13,29,0},
+                                            {7,0,0,-1},{7,2,3,12},{7,5,-1,0},{7,6,4,11},{7,10,-1,-1},{7,12,-1,-1},
+                                            {8,0,0,3},{8,3,9,0},{8,4,0,14},{8,9,0,-1},{8,11,24,15},{9,0,0,16},
+                                            {9,5,0,-1},{9,8,21,0},{9,10,0,-1},{9,12,-1,-1},{10,2,0,-1},{10,4,-1,0},
+                                            {10,6,17,0},{10,7,0,-1},{10,10,5,16},{11,3,-1,-1},{11,5,0,-1},{11,7,0,-1},
+                                            {11,9,14,11},{11,13,14,0},{12,2,-1,-1},{12,4,-1,0},{12,5,-1,-1},{12,7,0,23},
+                                            {12,12,-1,-1},{13,1,0,-1},{13,3,0,10},{13,8,0,-1},{13,11,0,15}                  });  
+    } 
+    
+    
+    public void cargarMatrizLogica(){
+        
+        cargarMatrizLogicaAux(new Integer[][]{
+                {0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 }, 
+                {0 , 1 , 1 , 1 , 0 , 1 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 0 }, 
+                {0 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 0 , 0 , 1 , 0 , 1 , 0 }, 
+                {0 , 0 , 0 , 1 , 1 , 1 , 1 , 0 , 0 , 1 , 0 , 0 , 0 , 1 }, 
+                {0 , 1 , 1 , 1 , 0 , 0 , 0 , 1 , 1 , 1 , 1 , 0 , 0 , 1 }, 
+                {0 , 1 , 1 , 1 , 1 , 0 , 0 , 1 , 1 , 0 , 1 , 0 , 0 , 1 }, 
+                {0 , 0 , 0 , 1 , 1 , 1 , 0 , 1 , 1 , 0 , 0 , 0 , 0 , 0 }, 
+                {0 , 1 , 0 , 1 , 1 , 0 , 0 , 1 , 1 , 0 , 0 , 1 , 0 , 1 }, 
+                {0 , 1 , 1 , 0 , 0 , 1 , 1 , 1 , 0 , 0 , 1 , 0 , 1 , 1 }, 
+                {0 , 1 , 1 , 1 , 0 , 0 , 1 , 0 , 0 , 0 , 0 , 1 , 0 , 1 }, 
+                {0 , 0 , 0 , 1 , 0 , 0 , 0 , 0 , 1 , 0 , 0 , 1 , 1 , 1 }, 
+                {0 , 0 , 0 , 0 , 1 , 0 , 1 , 0 , 1 , 0 , 1 , 1 , 0 , 0 }, 
+                {0 , 0 , 0 , 1 , 0 , 0 , 1 , 0 , 1 , 1 , 1 , 1 , 0 , 1 }, 
+                {0 , 0 , 1 , 0 , 1 , 1 , 0 , 0 , 0 , 1 , 0 , 0 , 1 , 1 } 
+    
+                                                                });
+    }
+  
+    public void cargarMatrizLogicaAux(Integer[][] valores){
+        for(int i = 0; i <14; i++)
+            for(int j = 0; j<14; j++){
+                logicalMatrix[i][j] = valores[i][j];
+                if(logicalMatrix[i][j] == 0) { 
+                    physicalMatrix[i][j].setStyle("-fx-opacity:1; -fx-base: #000000; -fx-text-fill: white");
+                }            
+            }
     }
     
     public void mostrarMatriz(){
@@ -110,7 +178,7 @@ public class FXMLDocumentController implements Initializable {
         int lado,tipoForma,cuadros = 0,fila,columna,cont = 0;
         Date ahora = new Date();
         rnd.setSeed(ahora.getSeconds());
-        while(cuadros<8){
+        while(cuadros<13){
             ArrayList<Integer> coordenada = new ArrayList<>();
             fila = 1+rnd.nextInt(12);//11
             columna = 1+rnd.nextInt(12);//11
@@ -195,7 +263,7 @@ public class FXMLDocumentController implements Initializable {
     public boolean cumple(int fila, int columna, ArrayList<ArrayList<Integer>> listos){        
         //System.out.println("FILA:"+fila+" COLUMNA: "+columna+" LISTOS: "+listos);
         for(int i=0; i<listos.size(); i++){
-            if(abs((listos.get(i).get(0)-fila))<4 && abs((listos.get(i).get(1)-columna))<4)
+            if(abs((listos.get(i).get(0)-fila))<3 && abs((listos.get(i).get(1)-columna))<3)
                 return false;
         }
         return true;
@@ -329,27 +397,50 @@ public class FXMLDocumentController implements Initializable {
     }
     
     public int sumDerecha(int fila, int columna){
-        int suma = 0;
+        int suma = 0, cont = 0;
         while(logicalMatrix[fila][columna]!=0){
             suma+=logicalMatrix[fila][columna];
             columna++;
+            cont++;
+        }
+        if(cont == 1){
+            suma = -1;
         }
         return suma;
     }
     
     public int sumAbajo(int fila, int columna){
-        int suma = 0;
+        int suma = 0,cont = 0;
         while(logicalMatrix[fila][columna]!=0){
             suma+=logicalMatrix[fila][columna];
             fila++;
+            cont++;
+        }
+        if(cont == 1){
+            suma = -1;
         }
         return suma;
     }
     
+    
+    public void empaquetarValores(Integer[][] valores){
+        ArrayList<Integer> temp = new ArrayList();
+        for(Integer[] ele: valores){
+            //System.out.println("Llave: [" + ele[0].toString() + ","+ele[1].toString()+","+ele[2].toString()+","+ele[3].toString()+"]");
+            temp.clear();
+            llaves.add(empaquetarValoresAux(ele));//temp);
+        }
+    }
+    
+    public ArrayList<Integer> empaquetarValoresAux(Integer[] valores){
+        ArrayList<Integer> temp = new ArrayList();
+        for(Integer ele: valores)
+            temp.add(ele);
+        return temp;
+    }
+     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO        
-        this.cargarMatriz();
         this.cargarHabilitados();
         //this.validarMatriz();
         this.mostrarMatriz();
@@ -358,7 +449,18 @@ public class FXMLDocumentController implements Initializable {
         this.cargarLlaves();
         System.out.println(llaves);
         this.enlazarBotones();
-        this.escribir();
+        //this.escribir();
+        //this.escribir();
+        //this.cargarMatrizLogica();
+        //this.cargarLlaves();
+        for(int i = 0; i <14; i++)
+            for(int j = 0; j<14; j++){
+                if(logicalMatrix[i][j] == 0) { 
+                    physicalMatrix[i][j].setStyle("-fx-opacity:1; -fx-base: #000000; -fx-text-fill: white");
+                }            
+            }
+        this.mostrarLlaves();        
+        
     }
     
 }
